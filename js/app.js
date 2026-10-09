@@ -458,10 +458,10 @@ function renderVietQRScreen(name, phone, orderCode, note, amount) {
       </div>
 
       <div style="margin-top:1.5rem;display:flex;flex-direction:column;gap:0.75rem;align-items:center;">
-        <a href="${BANK_CONFIG.zaloLink}" target="_blank" rel="noopener noreferrer" class="btn-purple" style="width:100%;max-width:390px;padding:1rem;font-size:1rem;text-decoration:none;">
-          ✅ Đã chuyển khoản – Vào nhóm Zalo ngay
+        <a href="https://zalo.me/g/4akhl5xv4arle8pmrdtb" target="_blank" rel="noopener noreferrer" class="btn-purple" style="width:100%;max-width:390px;padding:1rem;font-size:1rem;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;text-align:center;">
+          ✅ ĐÃ CHUYỂN KHOẢN – VÀO NHÓM ZALO NGAY
         </a>
-        <button type="button" onclick="document.getElementById('checkoutStep2').style.display='none';document.getElementById('checkoutStep1').style.display='block';" style="font-size:0.85rem;color:var(--purple-main);font-weight:700;text-decoration:underline;">
+        <button type="button" onclick="document.getElementById('checkoutStep2').style.display='none';document.getElementById('checkoutStep1').style.display='block';" style="font-size:0.85rem;color:var(--purple-main);font-weight:700;text-decoration:underline;cursor:pointer;">
           ← Quay lại chọn gói hoặc đổi thông tin
         </button>
       </div>
