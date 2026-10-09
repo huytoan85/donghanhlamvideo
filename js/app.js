@@ -149,9 +149,10 @@ const VIDEO_TYPES = [
 
 // BANK CONFIG
 const BANK_CONFIG = {
-  bankId: "MB",
-  accountNo: "0933750577",
-  accountName: "PHAM THI DINH",
+  bankId: "VCB",
+  bankName: "Vietcombank (VCB)",
+  accountNo: "9917722256",
+  accountName: "LE HUY TOAN",
   prices: {
     full: 499000,
     tool: 250000
@@ -160,7 +161,7 @@ const BANK_CONFIG = {
     full: "Khóa Đồng Hành 5 Ngày Trọn Gói cùng Toàn Lê",
     tool: "Ưu Đãi Đặc Biệt Khách Hàng Đã Mua Tool"
   },
-  zaloLink: "https://zalo.me/0933750577"
+  zaloLink: "https://zalo.me/g/4akhl5xv4arle8pmrdtb"
 };
 
 // 2. INITIALIZATION
@@ -421,13 +422,13 @@ function renderVietQRScreen(name, phone, orderCode, note, amount) {
       </p>
 
       <div class="qr-image-wrapper">
-        <img src="${qrImgUrl}" alt="Mã VietQR thanh toán" id="vietQrImage">
+        <img src="${qrImgUrl}" alt="Mã VietQR thanh toán" id="vietQrImage" onerror="this.onerror=null;this.src='assets/images/qr-payment.png';">
       </div>
 
       <div style="text-align:left;max-width:390px;margin:0 auto;">
         <div class="bank-detail-item">
           <span style="color:var(--text-dark-muted);">Ngân hàng:</span>
-          <span class="value">Quân Đội (MB Bank)</span>
+          <span class="value">${BANK_CONFIG.bankName}</span>
         </div>
         <div class="bank-detail-item">
           <span style="color:var(--text-dark-muted);">Số tài khoản:</span>
