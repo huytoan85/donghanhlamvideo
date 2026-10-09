@@ -1,0 +1,9 @@
+{
+  "name": "donghanhlamvideo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Landing page Khóa Đồng Hành 5 Ngày Master Video AI - Lê Huy Toàn",
+  "scripts": {
+    "start": "serve ."
+  }
+}
