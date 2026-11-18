@@ -154,7 +154,7 @@ const BANK_CONFIG = {
   accountNo: "9917722256",
   accountName: "LE HUY TOAN",
   prices: {
-    full: 499000,
+    full: 2590000,
     tool: 250000
   },
   planTitles: {
@@ -331,8 +331,8 @@ window.openVideoModal = function(slug) {
     </div>
 
     <div style="margin-top:1.5rem;text-align:center;border-top:1px dashed #d4cbf8;padding-top:1.25rem;">
-      <p style="color:var(--text-dark-muted);text-decoration:line-through;font-size:0.95rem;">Giá gốc: 999.000đ</p>
-      <p style="font-size:2.25rem;font-weight:900;color:var(--orange-main);">499.000đ</p>
+      <p style="color:var(--text-dark-muted);text-decoration:line-through;font-size:0.95rem;">Giá gốc: 7.990.000 VNĐ</p>
+      <p style="font-size:2.25rem;font-weight:900;color:var(--orange-main);">2.590.000 VNĐ</p>
       <button class="btn-purple" onclick="closeAllModals(); openCheckoutModal(false, 'full');" style="width:100%;max-width:380px;padding:1.05rem 1.75rem;margin-top:0.75rem;font-size:1rem;">
         Tham gia khóa học ngay
       </button>
