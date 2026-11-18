@@ -158,7 +158,7 @@ const BANK_CONFIG = {
     tool: 250000
   },
   planTitles: {
-    full: "Khóa Đồng Hành 5 Ngày Trọn Gói cùng Toàn Lê",
+    full: "Khóa Học AI PRO cùng Toàn Lê",
     tool: "Ưu Đãi Đặc Biệt Khách Hàng Đã Mua Tool"
   },
   zaloLink: "https://zalo.me/g/4akhl5xv4arle8pmrdtb"
@@ -315,7 +315,7 @@ window.openVideoModal = function(slug) {
   content.innerHTML = `
     <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem;">
       <span class="badge-tag ${video.group === 'BÁN HÀNG' ? 'tag-sales' : 'tag-channel'}" style="position:static;">${video.group}</span>
-      <span style="font-size:0.8rem;font-weight:800;color:var(--purple-title);">KHÓA 5 NGÀY MASTER VIDEO AI</span>
+      <span style="font-size:0.8rem;font-weight:800;color:var(--purple-title);">KHÓA HỌC AI PRO</span>
     </div>
     <h2 style="font-size:1.75rem;font-weight:900;color:var(--text-dark);">${video.name}</h2>
     <p style="margin-top:0.4rem;color:var(--text-dark-muted);font-size:0.95rem;">${video.desc}</p>
