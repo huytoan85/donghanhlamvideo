@@ -392,6 +392,8 @@ window.handleCheckoutSubmit = function(e) {
 
   const fullName = document.getElementById('custName').value.trim();
   const phone = document.getElementById('custPhone').value.trim();
+  const emailInput = document.getElementById('custEmail');
+  const email = emailInput ? emailInput.value.trim() : '';
 
   if (!fullName || !phone) {
     showToast('Vui lòng điền Họ tên và Số điện thoại!');
@@ -399,13 +401,74 @@ window.handleCheckoutSubmit = function(e) {
   }
 
   const orderCode = 'MV' + Math.floor(100000 + Math.random() * 900000);
-  const transferNote = `${phone} MASTER-VIDEO`;
+  const transferNote = `${phone} AIPRO`;
+
+  // Lưu dữ liệu vào hệ thống CRM
+  saveStudentToCRM({
+    id: 'HV' + Date.now(),
+    orderCode: orderCode,
+    fullName: fullName,
+    phone: phone,
+    email: email,
+    plan: currentPlan,
+    planTitle: BANK_CONFIG.planTitles[currentPlan] || 'Khóa Học AI PRO',
+    amount: currentOrderAmount,
+    status: 'pending',
+    createdAt: new Date().toISOString(),
+    transferNote: transferNote,
+    note: ''
+  });
 
   renderVietQRScreen(fullName, phone, orderCode, transferNote, currentOrderAmount);
 
   document.getElementById('checkoutStep1').style.display = 'none';
   document.getElementById('checkoutStep2').style.display = 'block';
 };
+
+function saveStudentToCRM(student) {
+  try {
+    const key = "crm_students_data";
+    const existing = localStorage.getItem(key);
+    const list = existing ? JSON.parse(existing) : [];
+    list.unshift(student);
+    localStorage.setItem(key, JSON.stringify(list));
+
+    // Optional Telegram / Google Sheet Webhook if configured
+    const settingsRaw = localStorage.getItem("crm_settings_data");
+    if (settingsRaw) {
+      const s = JSON.parse(settingsRaw);
+      if (s.botToken && s.chatId) {
+        const rawPhone = student.phone.replace(/[^0-9]/g, '');
+        const msg = `🔔 *HỌC VIÊN MỚI ĐĂNG KÝ!*
+👤 *Họ tên:* ${student.fullName}
+📱 *SĐT:* ${student.phone} (https://zalo.me/${rawPhone})
+📧 *Email:* ${student.email || 'Không có'}
+📦 *Gói:* ${student.planTitle}
+💰 *Số tiền:* ${student.amount.toLocaleString('vi-VN')}đ
+🔖 *Mã đơn:* #${student.orderCode}`;
+
+        fetch(`https://api.telegram.org/bot${s.botToken}/sendMessage`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            chat_id: s.chatId,
+            text: msg
+          })
+        }).catch(() => {});
+      }
+      if (s.sheetUrl) {
+        fetch(s.sheetUrl, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(student)
+        }).catch(() => {});
+      }
+    }
+  } catch (err) {
+    console.error("Lỗi lưu CRM:", err);
+  }
+}
 
 function renderVietQRScreen(name, phone, orderCode, note, amount) {
   const qrImgUrl = `https://img.vietqr.io/image/${BANK_CONFIG.bankId}-${BANK_CONFIG.accountNo}-compact2.png?amount=${amount}&addInfo=${encodeURIComponent(note)}&accountName=${encodeURIComponent(BANK_CONFIG.accountName)}`;

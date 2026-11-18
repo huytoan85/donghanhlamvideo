@@ -1,0 +1,1511 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quản Trị CRM Học Viên – Khóa Học AI PRO</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #0f0923;
+      --card-bg: rgba(24, 16, 54, 0.85);
+      --card-border: rgba(139, 92, 246, 0.25);
+      --purple-main: #5831d1;
+      --purple-hover: #4724b0;
+      --purple-light: rgba(88, 49, 209, 0.15);
+      --orange-main: #d84517;
+      --green-main: #10b981;
+      --green-light: rgba(16, 185, 129, 0.15);
+      --yellow-main: #f59e0b;
+      --yellow-light: rgba(245, 158, 11, 0.15);
+      --text-light: #ffffff;
+      --text-muted: #a79fc9;
+      --border-color: rgba(255, 255, 255, 0.08);
+      --font-body: 'Inter', system-ui, sans-serif;
+      --font-heading: 'Be Vietnam Pro', system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-body);
+      background-color: var(--bg-dark);
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(88, 49, 209, 0.25) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(216, 69, 23, 0.2) 0px, transparent 50%);
+      background-attachment: fixed;
+      color: var(--text-light);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Ambient Blobs */
+    .blob {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(100px);
+      z-index: -1;
+      pointer-events: none;
+      opacity: 0.35;
+    }
+    .blob-1 { width: 350px; height: 350px; background: #5831d1; top: -50px; left: -50px; }
+    .blob-2 { width: 400px; height: 400px; background: #d84517; bottom: -100px; right: -50px; }
+
+    /* ================= LOGIN VIEW ================= */
+    #loginView {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+      padding: 1.5rem;
+    }
+
+    .login-card {
+      width: 100%;
+      max-width: 440px;
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--card-border);
+      border-radius: 1.5rem;
+      padding: 2.5rem 2rem;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(88, 49, 209, 0.25);
+      animation: fadeIn 0.4s ease;
+    }
+
+    .login-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .login-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.35rem 0.9rem;
+      border-radius: 9999px;
+      background: var(--purple-light);
+      border: 1px solid rgba(167, 139, 250, 0.4);
+      color: #c4b5fd;
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.85rem;
+    }
+
+    .login-title {
+      font-family: var(--font-heading);
+      font-size: 1.85rem;
+      font-weight: 900;
+      color: #fff;
+    }
+
+    .login-title span {
+      background: linear-gradient(135deg, #a78bfa 0%, #fb923c 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .login-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.25rem;
+      text-align: left;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #e2ddfc;
+      margin-bottom: 0.4rem;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 0.85rem 1.15rem;
+      background: rgba(14, 9, 33, 0.7);
+      border: 1.5px solid var(--border-color);
+      border-radius: 0.75rem;
+      color: #fff;
+      font-size: 0.95rem;
+      font-family: inherit;
+      transition: all 0.2s ease;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--purple-main);
+      box-shadow: 0 0 0 3px rgba(88, 49, 209, 0.35);
+      background: rgba(14, 9, 33, 0.95);
+    }
+
+    .password-wrap {
+      position: relative;
+    }
+
+    .btn-toggle-pwd {
+      position: absolute;
+      right: 0.85rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 1.1rem;
+      padding: 0.25rem;
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 0.95rem;
+      border-radius: 0.75rem;
+      background: linear-gradient(135deg, #5831d1 0%, #742cdc 100%);
+      color: #fff;
+      font-weight: 800;
+      font-size: 1rem;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(88, 49, 209, 0.4);
+      transition: all 0.2s ease;
+      margin-top: 0.5rem;
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(88, 49, 209, 0.6);
+    }
+
+    .login-error {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: #fca5a5;
+      padding: 0.75rem 1rem;
+      border-radius: 0.65rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 1.25rem;
+      display: none;
+      text-align: center;
+    }
+
+    /* ================= CRM DASHBOARD VIEW ================= */
+    #dashboardView {
+      display: none;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    /* Header Nav */
+    .crm-header {
+      background: rgba(18, 11, 41, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 1rem 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .crm-nav-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .crm-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+    }
+
+    .crm-logo-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 0.75rem;
+      background: linear-gradient(135deg, var(--purple-main) 0%, var(--orange-main) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      box-shadow: 0 4px 15px rgba(88, 49, 209, 0.4);
+    }
+
+    .crm-brand-text h1 {
+      font-family: var(--font-heading);
+      font-size: 1.15rem;
+      font-weight: 900;
+      color: #fff;
+      line-height: 1.2;
+    }
+
+    .crm-brand-text p {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .crm-user-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .user-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(88, 49, 209, 0.2);
+      border: 1px solid rgba(167, 139, 250, 0.35);
+      padding: 0.4rem 0.85rem;
+      border-radius: 9999px;
+      font-size: 0.825rem;
+      font-weight: 700;
+      color: #ede9fe;
+    }
+
+    .btn-nav-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.5rem 0.95rem;
+      border-radius: 0.65rem;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      border: 1px solid var(--border-color);
+      background: rgba(255, 255, 255, 0.05);
+      color: #fff;
+    }
+
+    .btn-nav-action:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateY(-1px);
+    }
+
+    .btn-nav-action.primary {
+      background: var(--purple-main);
+      border-color: rgba(167, 139, 250, 0.5);
+    }
+    .btn-nav-action.primary:hover {
+      background: var(--purple-hover);
+    }
+
+    .btn-nav-action.success {
+      background: #059669;
+      border-color: rgba(52, 211, 153, 0.4);
+    }
+    .btn-nav-action.success:hover {
+      background: #047857;
+    }
+
+    .btn-nav-action.danger {
+      color: #fca5a5;
+      border-color: rgba(239, 68, 68, 0.3);
+    }
+    .btn-nav-action.danger:hover {
+      background: rgba(239, 68, 68, 0.2);
+    }
+
+    /* Main Content */
+    .crm-main {
+      max-width: 1400px;
+      width: 100%;
+      margin: 1.5rem auto;
+      padding: 0 1.5rem;
+      flex: 1;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .stat-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid var(--card-border);
+      border-radius: 1.25rem;
+      padding: 1.35rem 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 1.15rem;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+    }
+
+    .stat-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      flex-shrink: 0;
+    }
+
+    .stat-icon.purple { background: rgba(88, 49, 209, 0.25); border: 1px solid rgba(167, 139, 250, 0.4); color: #c4b5fd; }
+    .stat-icon.green  { background: rgba(16, 185, 129, 0.2); border: 1px solid rgba(52, 211, 153, 0.4); color: #6ee7b7; }
+    .stat-icon.yellow { background: rgba(245, 158, 11, 0.2); border: 1px solid rgba(251, 191, 36, 0.4); color: #fde68a; }
+    .stat-icon.orange { background: rgba(216, 69, 23, 0.25); border: 1px solid rgba(251, 146, 60, 0.4); color: #fdba74; }
+
+    .stat-info p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .stat-info h3 {
+      font-family: var(--font-heading);
+      font-size: 1.75rem;
+      font-weight: 900;
+      color: #fff;
+      margin-top: 0.2rem;
+    }
+
+    /* Table & Controls Container */
+    .crm-panel {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--card-border);
+      border-radius: 1.5rem;
+      padding: 1.5rem;
+      box-shadow: 0 10px 35px rgba(0, 0, 0, 0.3);
+    }
+
+    .toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.25rem;
+    }
+
+    .search-filter-group {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      flex: 1;
+    }
+
+    .search-box {
+      position: relative;
+      min-width: 260px;
+      flex: 1;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 0.75rem 1rem 0.75rem 2.5rem;
+      background: rgba(14, 9, 33, 0.7);
+      border: 1px solid var(--border-color);
+      border-radius: 0.65rem;
+      color: #fff;
+      font-size: 0.875rem;
+      font-family: inherit;
+    }
+
+    .search-box input:focus {
+      outline: none;
+      border-color: var(--purple-main);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 0.85rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .select-filter {
+      padding: 0.75rem 1rem;
+      background: rgba(14, 9, 33, 0.7);
+      border: 1px solid var(--border-color);
+      border-radius: 0.65rem;
+      color: #fff;
+      font-size: 0.875rem;
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    .select-filter:focus {
+      outline: none;
+      border-color: var(--purple-main);
+    }
+
+    .table-container {
+      overflow-x: auto;
+      border-radius: 1rem;
+      border: 1px solid var(--border-color);
+    }
+
+    .crm-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.875rem;
+    }
+
+    .crm-table th {
+      background: rgba(30, 20, 68, 0.75);
+      color: #c4b5fd;
+      font-weight: 800;
+      padding: 1rem 1.15rem;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid var(--border-color);
+      white-space: nowrap;
+    }
+
+    .crm-table td {
+      padding: 1rem 1.15rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      color: #e2ddfc;
+      vertical-align: middle;
+    }
+
+    .crm-table tr:hover td {
+      background: rgba(88, 49, 209, 0.08);
+    }
+
+    /* Student info cell */
+    .student-cell {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .student-avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #742cdc 0%, #d84517 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      color: #fff;
+      font-size: 0.95rem;
+      flex-shrink: 0;
+    }
+
+    .student-name {
+      font-weight: 800;
+      color: #fff;
+      font-size: 0.925rem;
+    }
+
+    .student-order {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-family: monospace;
+    }
+
+    /* Contact Links */
+    .phone-link {
+      color: #93c5fd;
+      text-decoration: none;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .btn-zalo-chat {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.2rem 0.55rem;
+      border-radius: 9999px;
+      background: #0068ff;
+      color: #fff;
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-decoration: none;
+      margin-left: 0.4rem;
+    }
+
+    .btn-zalo-chat:hover {
+      background: #0056d6;
+    }
+
+    /* Status Pills */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.35rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.775rem;
+      font-weight: 800;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.15s ease;
+    }
+
+    .status-pending {
+      background: rgba(245, 158, 11, 0.18);
+      color: #fbbf24;
+      border: 1px solid rgba(245, 158, 11, 0.35);
+    }
+
+    .status-paid {
+      background: rgba(16, 185, 129, 0.18);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.35);
+    }
+
+    .status-joined {
+      background: rgba(139, 92, 246, 0.25);
+      color: #c4b5fd;
+      border: 1px solid rgba(167, 139, 250, 0.45);
+    }
+
+    .status-cancelled {
+      background: rgba(239, 68, 68, 0.18);
+      color: #f87171;
+      border: 1px solid rgba(239, 68, 68, 0.35);
+    }
+
+    /* Action Buttons */
+    .table-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .btn-action-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 0.5rem;
+      border: 1px solid var(--border-color);
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s ease;
+    }
+
+    .btn-action-icon:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+    }
+
+    .btn-action-icon.delete:hover {
+      background: rgba(239, 68, 68, 0.2);
+      color: #f87171;
+      border-color: rgba(239, 68, 68, 0.4);
+    }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      padding: 3.5rem 1.5rem;
+      color: var(--text-muted);
+    }
+
+    .empty-state-icon {
+      font-size: 3rem;
+      margin-bottom: 0.75rem;
+      opacity: 0.6;
+    }
+
+    /* ================= MODAL DIALOGS ================= */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 5, 25, 0.75);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-box {
+      width: 100%;
+      max-width: 520px;
+      background: #19113a;
+      border: 1px solid var(--card-border);
+      border-radius: 1.5rem;
+      padding: 2rem;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+      transform: translateY(20px);
+      transition: transform 0.25s ease;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-overlay.active .modal-box {
+      transform: translateY(0);
+    }
+
+    .modal-title {
+      font-family: var(--font-heading);
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .btn-close-modal {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 1.5rem;
+      padding: 0.25rem;
+    }
+
+    /* Toast */
+    .toast-msg {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: #1b1240;
+      border: 1px solid rgba(139, 92, 246, 0.5);
+      color: #fff;
+      padding: 0.85rem 1.4rem;
+      border-radius: 0.75rem;
+      font-size: 0.875rem;
+      font-weight: 700;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      z-index: 200;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.25s ease;
+      pointer-events: none;
+    }
+
+    .toast-msg.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Ambient Blobs -->
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+
+  <!-- ================= 1. LOGIN SCREEN ================= -->
+  <div id="loginView">
+    <div class="login-card">
+      <div class="login-header">
+        <span class="login-badge">
+          🛡️ HỆ THỐNG QUẢN TRỊ CRM
+        </span>
+        <h1 class="login-title">
+          KHÓA HỌC <span>AI PRO</span>
+        </h1>
+        <p class="login-desc">Đăng nhập tài khoản để quản lý danh sách học viên</p>
+      </div>
+
+      <div class="login-error" id="loginErrorMsg">
+        Tên đăng nhập hoặc mật khẩu không chính xác!
+      </div>
+
+      <form onsubmit="handleAdminLogin(event)">
+        <div class="form-group">
+          <label class="form-label" for="loginUser">Tên đăng nhập</label>
+          <input type="text" id="loginUser" class="form-input" placeholder="Nhập tên đăng nhập" required autocomplete="username">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="loginPass">Mật khẩu</label>
+          <div class="password-wrap">
+            <input type="password" id="loginPass" class="form-input" placeholder="Nhập mật khẩu" required autocomplete="current-password">
+            <button type="button" class="btn-toggle-pwd" onclick="togglePasswordVisibility('loginPass')">👁️</button>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; font-size: 0.85rem; color: var(--text-muted);">
+          <label style="display: flex; align-items: center; gap: 0.45rem; cursor: pointer;">
+            <input type="checkbox" id="rememberMe" checked> Ghi nhớ đăng nhập
+          </label>
+          <a href="index.html" style="color: #a78bfa; text-decoration: none; font-weight: 600;">← Xem Website</a>
+        </div>
+
+        <button type="submit" class="btn-submit">
+          Đăng nhập CRM
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ================= 2. DASHBOARD SCREEN ================= -->
+  <div id="dashboardView">
+    
+    <!-- Top Nav -->
+    <header class="crm-header">
+      <div class="crm-nav-container">
+        <a href="#" class="crm-brand">
+          <div class="crm-logo-icon">⚡</div>
+          <div class="crm-brand-text">
+            <h1>CRM KHÓA HỌC AI PRO</h1>
+            <p>Quản lý học viên & Doanh thu</p>
+          </div>
+        </a>
+
+        <div class="crm-user-actions">
+          <span class="user-badge">
+            👤 <span id="displayAdminUser">huytoan85</span> (Quản trị viên)
+          </span>
+          <a href="index.html" target="_blank" class="btn-nav-action" title="Mở trang chủ">
+            🌐 Xem Landing Page
+          </a>
+          <button class="btn-nav-action success" onclick="exportStudentsToCSV()">
+            📥 Xuất Excel (CSV)
+          </button>
+          <button class="btn-nav-action primary" onclick="openStudentModal()">
+            ➕ Thêm học viên
+          </button>
+          <button class="btn-nav-action" onclick="openSettingsModal()" title="Cài đặt thông báo">
+            ⚙️ Cài đặt
+          </button>
+          <button class="btn-nav-action danger" onclick="handleAdminLogout()">
+            🚪 Đăng xuất
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main CRM Content -->
+    <main class="crm-main">
+      
+      <!-- Stats Overview -->
+      <section class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon purple">👥</div>
+          <div class="stat-info">
+            <p>Tổng học viên</p>
+            <h3 id="statTotalStudents">0</h3>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon green">💰</div>
+          <div class="stat-info">
+            <p>Tổng doanh thu</p>
+            <h3 id="statTotalRevenue">0đ</h3>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon yellow">⏳</div>
+          <div class="stat-info">
+            <p>Chờ thanh toán</p>
+            <h3 id="statPendingStudents">0</h3>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon orange">✅</div>
+          <div class="stat-info">
+            <p>Đã thanh toán / Vào nhóm</p>
+            <h3 id="statPaidStudents">0</h3>
+          </div>
+        </div>
+      </section>
+
+      <!-- Panel Data Table -->
+      <section class="crm-panel">
+        
+        <!-- Toolbar -->
+        <div class="toolbar">
+          <div class="search-filter-group">
+            <div class="search-box">
+              <span class="search-icon">🔍</span>
+              <input type="text" id="searchKeyword" placeholder="Tìm theo tên, SĐT, email, mã đơn..." oninput="renderStudentsTable()">
+            </div>
+
+            <select class="select-filter" id="filterStatus" onchange="renderStudentsTable()">
+              <option value="all">Tất cả trạng thái</option>
+              <option value="pending">⏳ Chờ thanh toán</option>
+              <option value="paid">💳 Đã chuyển khoản</option>
+              <option value="joined">✅ Đã vào nhóm Zalo</option>
+              <option value="cancelled">❌ Đã hủy</option>
+            </select>
+
+            <select class="select-filter" id="filterPlan" onchange="renderStudentsTable()">
+              <option value="all">Tất cả gói học</option>
+              <option value="full">Khóa Học AI PRO (2.590.000đ)</option>
+              <option value="tool">Ưu đãi Tool (250.000đ)</option>
+            </select>
+          </div>
+
+          <div style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">
+            Hiển thị: <span id="filteredCount" style="color: #fff; font-weight: 800;">0</span> học viên
+          </div>
+        </div>
+
+        <!-- Table -->
+        <div class="table-container">
+          <table class="crm-table">
+            <thead>
+              <tr>
+                <th>Học viên / Mã đơn</th>
+                <th>Số điện thoại & Zalo</th>
+                <th>Email</th>
+                <th>Gói học</th>
+                <th>Số tiền</th>
+                <th>Thời gian</th>
+                <th>Trạng thái</th>
+                <th>Ghi chú</th>
+                <th style="text-align: right;">Thao tác</th>
+              </tr>
+            </thead>
+            <tbody id="studentsTableBody">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+  <!-- ================= MODAL: THÊM / SỬA HỌC VIÊN ================= -->
+  <div class="modal-overlay" id="studentModal">
+    <div class="modal-box">
+      <div class="modal-title">
+        <span id="studentModalHeading">Thêm học viên mới</span>
+        <button class="btn-close-modal" onclick="closeStudentModal()">✕</button>
+      </div>
+
+      <form onsubmit="handleSaveStudent(event)">
+        <input type="hidden" id="editStudentId">
+
+        <div class="form-group">
+          <label class="form-label" for="formStudentName">Họ và tên *</label>
+          <input type="text" id="formStudentName" class="form-input" placeholder="Ví dụ: Trần Văn Nam" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="formStudentPhone">Số điện thoại *</label>
+          <input type="tel" id="formStudentPhone" class="form-input" placeholder="Ví dụ: 0912345678" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="formStudentEmail">Email</label>
+          <input type="email" id="formStudentEmail" class="form-input" placeholder="hocvien@gmail.com">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="formStudentPlan">Gói đăng ký</label>
+          <select id="formStudentPlan" class="form-input" onchange="handlePlanSelectChange()">
+            <option value="full">Khóa Học AI PRO (2.590.000đ)</option>
+            <option value="tool">Ưu đãi Khách đã mua Tool (250.000đ)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="formStudentAmount">Số tiền thanh toán (VNĐ)</label>
+          <input type="number" id="formStudentAmount" class="form-input" value="2590000" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="formStudentStatus">Trạng thái thanh toán</label>
+          <select id="formStudentStatus" class="form-input">
+            <option value="pending">⏳ Chờ thanh toán</option>
+            <option value="paid">💳 Đã chuyển khoản</option>
+            <option value="joined">✅ Đã vào nhóm Zalo</option>
+            <option value="cancelled">❌ Đã hủy</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="formStudentNote">Ghi chú riêng</label>
+          <textarea id="formStudentNote" class="form-input" rows="3" placeholder="Ghi chú về học viên (vd: Đã gửi tài liệu Zoom, đã cọc 1tr...)"></textarea>
+        </div>
+
+        <button type="submit" class="btn-submit">
+          Lưu thông tin học viên
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ================= MODAL: CÀI ĐẶT THÔNG BÁO ================= -->
+  <div class="modal-overlay" id="settingsModal">
+    <div class="modal-box">
+      <div class="modal-title">
+        <span>⚙️ Cài đặt CRM & Thông báo</span>
+        <button class="btn-close-modal" onclick="closeSettingsModal()">✕</button>
+      </div>
+
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.25rem;">
+        Cấu hình để nhận thông báo tức thì trên điện thoại khi có học viên đăng ký mới:
+      </p>
+
+      <form onsubmit="handleSaveSettings(event)">
+        <div class="form-group">
+          <label class="form-label" for="teleBotToken">Telegram Bot Token (tùy chọn)</label>
+          <input type="text" id="teleBotToken" class="form-input" placeholder="Ví dụ: 123456789:ABCdefGHIjk...">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="teleChatId">Telegram Chat ID (tùy chọn)</label>
+          <input type="text" id="teleChatId" class="form-input" placeholder="Ví dụ: -100123456789 hoặc ID cá nhân">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="googleSheetUrl">Google Sheets Webhook URL (tùy chọn)</label>
+          <input type="url" id="googleSheetUrl" class="form-input" placeholder="https://script.google.com/macros/s/.../exec">
+        </div>
+
+        <div style="background: rgba(88, 49, 209, 0.15); border: 1px solid rgba(167, 139, 250, 0.3); border-radius: 0.75rem; padding: 0.85rem; font-size: 0.8rem; color: #ede9fe; margin-bottom: 1.25rem;">
+          💡 <strong>Mẹo:</strong> Cấu hình Telegram giúp bạn nhận thông báo kèm link chat Zalo của học viên ngay khi họ bấm đăng ký!
+        </div>
+
+        <button type="submit" class="btn-submit">
+          Lưu cài đặt
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Message -->
+  <div class="toast-msg" id="crmToast">Thông báo</div>
+
+  <!-- JAVASCRIPT APPLICATION -->
+  <script>
+    // 1. CONFIG & CREDENTIALS
+    const AUTH_CONFIG = {
+      user: "huytoan85",
+      pass: "Duyanh1401$"
+    };
+
+    const STORAGE_KEYS = {
+      auth: "crm_auth_token",
+      students: "crm_students_data",
+      settings: "crm_settings_data"
+    };
+
+    // 2. INITIALIZATION
+    document.addEventListener("DOMContentLoaded", () => {
+      checkAuthStatus();
+      initInitialDataIfEmpty();
+      renderStudentsTable();
+      updateDashboardStats();
+    });
+
+    // 3. AUTHENTICATION LOGIC
+    function checkAuthStatus() {
+      const isAuth = sessionStorage.getItem(STORAGE_KEYS.auth) || localStorage.getItem(STORAGE_KEYS.auth);
+      if (isAuth === "authenticated") {
+        document.getElementById("loginView").style.display = "none";
+        document.getElementById("dashboardView").style.display = "flex";
+      } else {
+        document.getElementById("loginView").style.display = "flex";
+        document.getElementById("dashboardView").style.display = "none";
+      }
+    }
+
+    function handleAdminLogin(e) {
+      e.preventDefault();
+      const user = document.getElementById("loginUser").value.trim();
+      const pass = document.getElementById("loginPass").value;
+      const remember = document.getElementById("rememberMe").checked;
+      const errorMsg = document.getElementById("loginErrorMsg");
+
+      if (user === AUTH_CONFIG.user && pass === AUTH_CONFIG.pass) {
+        errorMsg.style.display = "none";
+        sessionStorage.setItem(STORAGE_KEYS.auth, "authenticated");
+        if (remember) {
+          localStorage.setItem(STORAGE_KEYS.auth, "authenticated");
+        }
+        showToast("Đăng nhập CRM thành công!");
+        checkAuthStatus();
+        renderStudentsTable();
+        updateDashboardStats();
+      } else {
+        errorMsg.style.display = "block";
+        document.getElementById("loginPass").value = "";
+      }
+    }
+
+    function handleAdminLogout() {
+      if (confirm("Bạn có chắc chắn muốn đăng xuất khỏi CRM?")) {
+        sessionStorage.removeItem(STORAGE_KEYS.auth);
+        localStorage.removeItem(STORAGE_KEYS.auth);
+        checkAuthStatus();
+        showToast("Đã đăng xuất an toàn");
+      }
+    }
+
+    function togglePasswordVisibility(id) {
+      const el = document.getElementById(id);
+      el.type = el.type === "password" ? "text" : "password";
+    }
+
+    // 4. DATA MANAGEMENT
+    function getStudents() {
+      try {
+        const data = localStorage.getItem(STORAGE_KEYS.students);
+        return data ? JSON.parse(data) : [];
+      } catch (err) {
+        return [];
+      }
+    }
+
+    function saveStudents(list) {
+      localStorage.setItem(STORAGE_KEYS.students, JSON.stringify(list));
+      updateDashboardStats();
+    }
+
+    function initInitialDataIfEmpty() {
+      const existing = getStudents();
+      if (!existing || existing.length === 0) {
+        const sampleStudents = [
+          {
+            id: "HV" + (Date.now() - 3600000 * 2),
+            orderCode: "MV849201",
+            fullName: "Nguyễn Văn Hùng",
+            phone: "0933750577",
+            email: "hung.nguyen@gmail.com",
+            plan: "full",
+            planTitle: "Khóa Học AI PRO",
+            amount: 2590000,
+            status: "joined",
+            createdAt: new Date(Date.now() - 3600000 * 2).toISOString(),
+            note: "Đã vào nhóm Zalo lớp VIP"
+          },
+          {
+            id: "HV" + (Date.now() - 3600000 * 5),
+            orderCode: "MV623190",
+            fullName: "Trần Thị Mai Lan",
+            phone: "0912345678",
+            email: "mailan.tran@gmail.com",
+            plan: "full",
+            planTitle: "Khóa Học AI PRO",
+            amount: 2590000,
+            status: "paid",
+            createdAt: new Date(Date.now() - 3600000 * 5).toISOString(),
+            note: "Đã chuyển khoản Vietcombank"
+          },
+          {
+            id: "HV" + (Date.now() - 3600000 * 9),
+            orderCode: "MV412984",
+            fullName: "Lê Quốc Bảo",
+            phone: "0987654321",
+            email: "baole.ai@gmail.com",
+            plan: "tool",
+            planTitle: "Ưu đãi Khách đã mua Tool",
+            amount: 250000,
+            status: "pending",
+            createdAt: new Date(Date.now() - 3600000 * 9).toISOString(),
+            note: "Khách cũ hỏi thêm về link Zoom"
+          }
+        ];
+        saveStudents(sampleStudents);
+      }
+    }
+
+    // 5. RENDER TABLE & STATS
+    function renderStudentsTable() {
+      const students = getStudents();
+      const keyword = (document.getElementById("searchKeyword").value || "").toLowerCase().trim();
+      const statusFilter = document.getElementById("filterStatus").value;
+      const planFilter = document.getElementById("filterPlan").value;
+
+      const filtered = students.filter(st => {
+        const matchKeyword = !keyword || 
+          st.fullName.toLowerCase().includes(keyword) ||
+          st.phone.includes(keyword) ||
+          (st.email && st.email.toLowerCase().includes(keyword)) ||
+          st.orderCode.toLowerCase().includes(keyword);
+
+        const matchStatus = statusFilter === "all" || st.status === statusFilter;
+        const matchPlan = planFilter === "all" || st.plan === planFilter;
+
+        return matchKeyword && matchStatus && matchPlan;
+      });
+
+      document.getElementById("filteredCount").textContent = filtered.length;
+      const tbody = document.getElementById("studentsTableBody");
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="9">
+              <div class="empty-state">
+                <div class="empty-state-icon">📭</div>
+                <p style="font-weight: 700; color: #fff;">Chưa tìm thấy học viên nào</p>
+                <p style="font-size: 0.8rem; margin-top: 0.25rem;">Thử thay đổi từ khóa tìm kiếm hoặc bấm "Thêm học viên"</p>
+              </div>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      // Sort newest first
+      filtered.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+      tbody.innerHTML = filtered.map(st => {
+        const initial = st.fullName ? st.fullName.charAt(0).toUpperCase() : 'H';
+        const dateFormatted = formatDateTime(st.createdAt);
+        const rawPhone = st.phone.replace(/[^0-9]/g, '');
+
+        let statusClass = 'status-pending';
+        let statusText = '⏳ Chờ thanh toán';
+        if (st.status === 'paid') {
+          statusClass = 'status-paid';
+          statusText = '💳 Đã chuyển khoản';
+        } else if (st.status === 'joined') {
+          statusClass = 'status-joined';
+          statusText = '✅ Đã vào nhóm';
+        } else if (st.status === 'cancelled') {
+          statusClass = 'status-cancelled';
+          statusText = '❌ Đã hủy';
+        }
+
+        return `
+          <tr>
+            <td>
+              <div class="student-cell">
+                <div class="student-avatar">${initial}</div>
+                <div>
+                  <div class="student-name">${escapeHtml(st.fullName)}</div>
+                  <div class="student-order">#${st.orderCode}</div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <a href="tel:${rawPhone}" class="phone-link" title="Gọi điện">
+                📞 ${escapeHtml(st.phone)}
+              </a>
+              <a href="https://zalo.me/${rawPhone}" target="_blank" class="btn-zalo-chat" title="Chat Zalo ngay">
+                Chat Zalo
+              </a>
+            </td>
+            <td>
+              ${st.email ? `<a href="mailto:${escapeHtml(st.email)}" style="color:var(--text-muted);text-decoration:none;">${escapeHtml(st.email)}</a>` : '<span style="color:#6b628a;">-</span>'}
+            </td>
+            <td>
+              <span style="font-weight:700;font-size:0.825rem;color:${st.plan === 'full' ? '#c4b5fd' : '#fdba74'};">
+                ${escapeHtml(st.planTitle || (st.plan === 'full' ? 'Khóa Học AI PRO' : 'Ưu đãi Tool'))}
+              </span>
+            </td>
+            <td style="font-weight:800;color:var(--orange-main);font-size:0.95rem;">
+              ${(st.amount || 0).toLocaleString('vi-VN')}đ
+            </td>
+            <td style="font-size:0.8rem;color:var(--text-muted);white-space:nowrap;">
+              ${dateFormatted}
+            </td>
+            <td>
+              <span class="status-badge ${statusClass}" onclick="cycleStudentStatus('${st.id}')" title="Nhấp để chuyển nhanh trạng thái">
+                ${statusText}
+              </span>
+            </td>
+            <td style="max-width:180px;font-size:0.8rem;color:#d1c9f2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${escapeHtml(st.note || '')}">
+              ${escapeHtml(st.note || '-')}
+            </td>
+            <td style="text-align: right;">
+              <div class="table-actions" style="justify-content: flex-end;">
+                <button class="btn-action-icon" onclick="editStudent('${st.id}')" title="Chỉnh sửa">
+                  ✏️
+                </button>
+                <button class="btn-action-icon delete" onclick="deleteStudent('${st.id}')" title="Xóa học viên">
+                  🗑️
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function updateDashboardStats() {
+      const students = getStudents();
+      const totalCount = students.length;
+      const pendingCount = students.filter(s => s.status === 'pending').length;
+      const paidCount = students.filter(s => s.status === 'paid' || s.status === 'joined').length;
+      
+      const totalRevenue = students
+        .filter(s => s.status === 'paid' || s.status === 'joined')
+        .reduce((sum, s) => sum + (s.amount || 0), 0);
+
+      document.getElementById('statTotalStudents').textContent = totalCount;
+      document.getElementById('statPendingStudents').textContent = pendingCount;
+      document.getElementById('statPaidStudents').textContent = paidCount;
+      document.getElementById('statTotalRevenue').textContent = totalRevenue.toLocaleString('vi-VN') + 'đ';
+    }
+
+    // 6. STUDENT ACTIONS (ADD, EDIT, DELETE, STATUS)
+    function openStudentModal(isEdit = false) {
+      document.getElementById('studentModalHeading').textContent = isEdit ? "Chỉnh sửa học viên" : "Thêm học viên mới";
+      document.getElementById('studentModal').classList.add('active');
+    }
+
+    function closeStudentModal() {
+      document.getElementById('studentModal').classList.remove('active');
+      document.getElementById('editStudentId').value = "";
+      document.getElementById('formStudentName').value = "";
+      document.getElementById('formStudentPhone').value = "";
+      document.getElementById('formStudentEmail').value = "";
+      document.getElementById('formStudentPlan').value = "full";
+      document.getElementById('formStudentAmount').value = "2590000";
+      document.getElementById('formStudentStatus').value = "pending";
+      document.getElementById('formStudentNote').value = "";
+    }
+
+    function handlePlanSelectChange() {
+      const plan = document.getElementById('formStudentPlan').value;
+      document.getElementById('formStudentAmount').value = plan === 'full' ? 2590000 : 250000;
+    }
+
+    function handleSaveStudent(e) {
+      e.preventDefault();
+      const editId = document.getElementById('editStudentId').value;
+      const name = document.getElementById('formStudentName').value.trim();
+      const phone = document.getElementById('formStudentPhone').value.trim();
+      const email = document.getElementById('formStudentEmail').value.trim();
+      const plan = document.getElementById('formStudentPlan').value;
+      const amount = parseInt(document.getElementById('formStudentAmount').value, 10) || 0;
+      const status = document.getElementById('formStudentStatus').value;
+      const note = document.getElementById('formStudentNote').value.trim();
+
+      const students = getStudents();
+
+      if (editId) {
+        // Edit existing
+        const idx = students.findIndex(s => s.id === editId);
+        if (idx !== -1) {
+          students[idx].fullName = name;
+          students[idx].phone = phone;
+          students[idx].email = email;
+          students[idx].plan = plan;
+          students[idx].planTitle = plan === 'full' ? 'Khóa Học AI PRO' : 'Ưu đãi Khách đã mua Tool';
+          students[idx].amount = amount;
+          students[idx].status = status;
+          students[idx].note = note;
+          showToast("Đã cập nhật thông tin học viên!");
+        }
+      } else {
+        // Add new
+        const newStudent = {
+          id: "HV" + Date.now(),
+          orderCode: "MV" + Math.floor(100000 + Math.random() * 900000),
+          fullName: name,
+          phone: phone,
+          email: email,
+          plan: plan,
+          planTitle: plan === 'full' ? 'Khóa Học AI PRO' : 'Ưu đãi Khách đã mua Tool',
+          amount: amount,
+          status: status,
+          createdAt: new Date().toISOString(),
+          note: note
+        };
+        students.unshift(newStudent);
+        showToast("Đã thêm học viên mới thành công!");
+      }
+
+      saveStudents(students);
+      closeStudentModal();
+      renderStudentsTable();
+    }
+
+    function editStudent(id) {
+      const students = getStudents();
+      const st = students.find(s => s.id === id);
+      if (!st) return;
+
+      document.getElementById('editStudentId').value = st.id;
+      document.getElementById('formStudentName').value = st.fullName;
+      document.getElementById('formStudentPhone').value = st.phone;
+      document.getElementById('formStudentEmail').value = st.email || '';
+      document.getElementById('formStudentPlan').value = st.plan || 'full';
+      document.getElementById('formStudentAmount').value = st.amount || 2590000;
+      document.getElementById('formStudentStatus').value = st.status || 'pending';
+      document.getElementById('formStudentNote').value = st.note || '';
+
+      openStudentModal(true);
+    }
+
+    function deleteStudent(id) {
+      if (confirm("Bạn có chắc chắn muốn xóa học viên này khỏi danh sách?")) {
+        const students = getStudents().filter(s => s.id !== id);
+        saveStudents(students);
+        renderStudentsTable();
+        showToast("Đã xóa học viên");
+      }
+    }
+
+    function cycleStudentStatus(id) {
+      const students = getStudents();
+      const st = students.find(s => s.id === id);
+      if (!st) return;
+
+      const order = ['pending', 'paid', 'joined', 'cancelled'];
+      const nextIdx = (order.indexOf(st.status) + 1) % order.length;
+      st.status = order[nextIdx];
+
+      saveStudents(students);
+      renderStudentsTable();
+      showToast(`Đã chuyển trạng thái: ${st.fullName}`);
+    }
+
+    // 7. EXPORT TO CSV / EXCEL
+    function exportStudentsToCSV() {
+      const students = getStudents();
+      if (!students || students.length === 0) {
+        showToast("Chưa có dữ liệu học viên để xuất file!");
+        return;
+      }
+
+      let csv = "\uFEFF"; // UTF-8 BOM for Excel support
+      csv += "STT,Mã Đơn,Họ Và Tên,Số Điện Thoại,Email,Gói Học,Số Tiền (VNĐ),Trạng Thái,Thời Gian Đăng Ký,Ghi Chú\n";
+
+      students.forEach((st, idx) => {
+        let statusVN = "Chờ thanh toán";
+        if (st.status === 'paid') statusVN = "Đã chuyển khoản";
+        if (st.status === 'joined') statusVN = "Đã vào nhóm Zalo";
+        if (st.status === 'cancelled') statusVN = "Đã hủy";
+
+        const row = [
+          idx + 1,
+          `"${st.orderCode}"`,
+          `"${(st.fullName || '').replace(/"/g, '""')}"`,
+          `"${st.phone}"`,
+          `"${st.email || ''}"`,
+          `"${(st.planTitle || (st.plan === 'full' ? 'Khóa Học AI PRO' : 'Ưu đãi Tool')).replace(/"/g, '""')}"`,
+          st.amount || 0,
+          `"${statusVN}"`,
+          `"${formatDateTime(st.createdAt)}"`,
+          `"${(st.note || '').replace(/"/g, '""')}"`
+        ];
+        csv += row.join(",") + "\n";
+      });
+
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      const timestamp = new Date().toISOString().slice(0, 10);
+      link.setAttribute("href", url);
+      link.setAttribute("download", `HocVien_KhoaHocAIPRO_${timestamp}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      showToast("Đã tải xuống file Excel học viên!");
+    }
+
+    // 8. SETTINGS MODAL
+    function openSettingsModal() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEYS.settings);
+        if (raw) {
+          const s = JSON.parse(raw);
+          document.getElementById('teleBotToken').value = s.botToken || '';
+          document.getElementById('teleChatId').value = s.chatId || '';
+          document.getElementById('googleSheetUrl').value = s.sheetUrl || '';
+        }
+      } catch (e) {}
+      document.getElementById('settingsModal').classList.add('active');
+    }
+
+    function closeSettingsModal() {
+      document.getElementById('settingsModal').classList.remove('active');
+    }
+
+    function handleSaveSettings(e) {
+      e.preventDefault();
+      const settings = {
+        botToken: document.getElementById('teleBotToken').value.trim(),
+        chatId: document.getElementById('teleChatId').value.trim(),
+        sheetUrl: document.getElementById('googleSheetUrl').value.trim()
+      };
+      localStorage.setItem(STORAGE_KEYS.settings, JSON.stringify(settings));
+      closeSettingsModal();
+      showToast("Đã lưu cấu hình thông báo!");
+    }
+
+    // 9. HELPERS
+    function formatDateTime(isoStr) {
+      if (!isoStr) return '-';
+      const d = new Date(isoStr);
+      if (isNaN(d.getTime())) return isoStr;
+      const day = String(d.getDate()).padStart(2, '0');
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const year = d.getFullYear();
+      const hours = String(d.getHours()).padStart(2, '0');
+      const mins = String(d.getMinutes()).padStart(2, '0');
+      return `${hours}:${mins} ${day}/${month}/${year}`;
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('crmToast');
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2500);
+    }
+  </script>
+</body>
+</html>
